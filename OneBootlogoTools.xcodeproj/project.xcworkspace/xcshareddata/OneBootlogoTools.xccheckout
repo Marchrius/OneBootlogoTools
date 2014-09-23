@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>62153E71-40ED-4F99-BBE0-9D3421721F4F</string>
+	<key>IDESourceControlProjectName</key>
+	<string>OneBootlogoTools</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>BAEDD40F4B465BDF80A4F8FAA01BD98B9BFFF50A</key>
+		<string>https://github.com/Marchrius/OneBootlogoTools.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>OneBootlogoTools.xcodeproj</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>BAEDD40F4B465BDF80A4F8FAA01BD98B9BFFF50A</key>
+		<string>../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>https://github.com/Marchrius/OneBootlogoTools.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>111</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>BAEDD40F4B465BDF80A4F8FAA01BD98B9BFFF50A</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>BAEDD40F4B465BDF80A4F8FAA01BD98B9BFFF50A</string>
+			<key>IDESourceControlWCCName</key>
+			<string>OneBootlogoTools</string>
+		</dict>
+	</array>
+</dict>
+</plist>
