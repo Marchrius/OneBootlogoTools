@@ -53,6 +53,7 @@ int main(int argc, const char * argv[]) {
     
     long int fastsize = 0;
     
+	long unsigned int = 0;
     FILE *logoF = NULL;
     FILE *fastF = NULL;
     FILE *fileF = NULL;
