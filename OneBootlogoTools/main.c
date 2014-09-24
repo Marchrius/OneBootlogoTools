@@ -110,21 +110,21 @@ int main(int argc, const char * argv[]) {
         fseek(fastF, 0L, SEEK_SET);
     }
     
-    for (long int i = 0; i < FILE_LEN; i++) {
+    for ( i = 0; i < FILE_LEN; i++) {
         fileBin[i] = fgetc(fileF);
     }
     
     fclose(fileF);
 
-    for (long int i = 0; i < LOGO_LEN && flashBoot; i++) {
+    for ( i = 0; i < LOGO_LEN && flashBoot; i++) {
         logoBin[i] = fgetc(logoF);
     }
     
-    for (long int i = 0; i < FAST_LEN && flashFast; i++) {
+    for ( i = 0; i < FAST_LEN && flashFast; i++) {
         fastBin[i] = fgetc(fastF);
     }
     
-    for (long long int i = 0; i < FILE_LEN; i++)
+    for ( i = 0; i < FILE_LEN; i++)
     {
         if (i >= 512 && i < 6221312 && flashBoot)
         {
@@ -143,7 +143,7 @@ int main(int argc, const char * argv[]) {
         return errno;
     }
     
-    for (long int i = 0; i < FILE_LEN; i++) {
+    for ( i = 0; i < FILE_LEN; i++) {
         fwrite(&fileBin[i], sizeof(uint8_t), 1, fileF);
     }
     
