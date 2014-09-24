@@ -17,6 +17,10 @@
 #define DLOG(fmt, ...) do{} while(0)
 #endif
 
+#ifdef __LINUX__
+#define uint8_t unsigned char
+#endif
+
 void usage();
 
 typedef unsigned short bool;
@@ -27,33 +31,14 @@ unsigned long FILE_LEN = 9821696;
 unsigned long LOGO_LEN = 6220800;
 unsigned long FAST_LEN = 315000;
 
-uint8_t headerLogo[] = {
-    0x53, 0x50, 0x4C, 0x41, 0x53, 0x48, 0x21, 0x21,
-    0x38, 0x04, 0x00, 0x00, 0x7F, 0x07, 0x00, 0x00,
-    0x00, 0x00, 0x00, 0x00, 0x00, 0x62, 0x6E, 0x00,
-    0x00, 0xE2, 0x5E, 0x00, 0x00, 0x20, 0x93, 0x00,
-    0x00, 0x52, 0x94, 0x00, 0x00, 0x5E, 0x60, 0x00,
-    0x00, 0x68, 0x73, 0x00, 0x00, 0x00, 0x00, 0x00 };
-
-uint8_t header2[] = {};
-
-uint8_t header3[] = {};
-
-uint8_t headerFast[] = {
-    0x53, 0x50, 0x4C, 0x41, 0x53, 0x48, 0x21, 0x21,
-    0x5E, 0x01, 0x00, 0x00, 0x39, 0x01, 0x00, 0x00 };
-
-uint8_t header5[] = {};
-
-uint8_t header6[] = {};
-
 int main(int argc, const char * argv[]) {
     
     long int logosize = 0;
     
     long int fastsize = 0;
     
-	long unsigned int = 0;
+	long unsigned int i = 0;
+    
     FILE *logoF = NULL;
     FILE *fastF = NULL;
     FILE *fileF = NULL;
@@ -141,21 +126,9 @@ int main(int argc, const char * argv[]) {
     
     for (long long int i = 0; i < FILE_LEN; i++)
     {
-        if (i >= 0 && i < 48 && flashBoot) {
-            fileBin[i] = headerLogo[i]; // main logo header
-        } else
-        
-        if (i >= 48 && i < 512 && flashBoot) { // main logo header
-            fileBin[i] = 0x00;
-        } else
-        
         if (i >= 512 && i < 6221312 && flashBoot)
         {
             fileBin[i] = logoBin[i - 512]; // bootlogo image
-        } else
-        
-        if (i >= 7234048 && i < 7234064 && flashFast) {
-            fileBin[i] = headerFast[i - 7234048]; // fastboot logo header
         } else
         
         if (i >= 7234560 && i < 7549560 && flashFast)
