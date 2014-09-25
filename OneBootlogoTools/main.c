@@ -11,6 +11,9 @@
 #include <errno.h>
 #include <string.h>
 
+#define AUTHOR "Matteo Gaggiano"
+#define VERSION "1.0b2"
+
 #if DEBUG
 #define DLOG(fmt, ...) printf("Debug: " fmt "\n", ##__VA_ARGS__);
 #else
@@ -46,43 +49,38 @@ int main(int argc, const char * argv[]) {
     bool flashBoot = FALSE;
     bool flashFast = FALSE;
     
+	char option = 0;
+
+	while ((option = getopt(argc, argv,"bf")) != -1) {
+        switch (option) {
+       	     case 'b' : flashBoot = TRUE;
+       	         break;
+       	     case 'f' : flashFast = TRUE;
+       	         break;
+			default:
+				usage(); 
+       	         exit(EXIT_FAILURE);
+       	}
+	}
+
+	if ( !flashBoot && !flashFast ) {
+		usage();
+		exit(EXIT_FAILURE);
+	}
+
     uint8_t *logoBin = malloc(sizeof(uint8_t) * LOGO_LEN);
     
     uint8_t *fastBin = malloc(sizeof(uint8_t) * FAST_LEN);
     
     uint8_t *fileBin = malloc(sizeof(uint8_t) * FILE_LEN);
     
-    if (argc == 2) {
-        if (!strcmp(argv[1], "-b")) {
-            flashBoot = TRUE;
-        } else if (!strcmp(argv[1], "-f")) {
-            flashFast = TRUE;
-        }
-    } else if (argc == 3) {
-        if (!strcmp(argv[1], "-b")) {
-            flashBoot = TRUE;
-        } else if (!strcmp(argv[1], "-f")) {
-            flashFast = TRUE;
-        }
-        if (!strcmp(argv[2], "-b")) {
-            flashBoot = TRUE;
-        } else if (!strcmp(argv[2], "-f")) {
-            flashFast = TRUE;
-        }
-    } else {
-        printf("Too many arguments!\n");
-        usage();
-        return 255;
-    }
-    
-    
-    
     logoF = fopen("bootlogo.raw", "r");
     if (!logoF && flashBoot) {
         perror("Error while read bootlogo.raw");
         return errno;
     }
-        flashBoot = TRUE;
+    
+	flashBoot = TRUE;
     
     fastF = fopen("fastboot.raw", "r");
     if (!fastF && flashFast) {
@@ -119,10 +117,14 @@ int main(int argc, const char * argv[]) {
     for ( i = 0; i < LOGO_LEN && flashBoot; i++) {
         logoBin[i] = fgetc(logoF);
     }
+	
+	fclose(logoF);
     
     for ( i = 0; i < FAST_LEN && flashFast; i++) {
         fastBin[i] = fgetc(fastF);
     }
+
+	fclose(fastF);
     
     for ( i = 0; i < FILE_LEN; i++)
     {
@@ -157,5 +159,5 @@ int main(int argc, const char * argv[]) {
 }
 
 void usage() {
-    printf("OneBootlogoTools:\n\t-b bootlogo.raw \t Overwrite the bootlogo\n\t-f fastboot.raw \t Overwrite the fastboot image\n\nVersion: 1.0b1 by Matteo Gaggiano\n");
+    printf("OneBootlogoTools:\n\t-b bootlogo.raw \t Overwrite the bootlogo\n\t-f fastboot.raw \t Overwrite the fastboot image\n\nVersion: " VERSION " by " AUTHOR "\n");
 }
