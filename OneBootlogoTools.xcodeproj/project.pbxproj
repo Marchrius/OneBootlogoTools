@@ -7,7 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		95EE8CA919D225F400D394F6 /* main.c in Sources */ = {isa = PBXBuildFile; fileRef = 95B11A2A19D1F94700B9D1EA /* main.c */; };
+		95EE8CA919D225F400D394F6 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 95B11A2A19D1F94700B9D1EA /* main.cpp */; };
+		95F6A19419D8636100B63ECE /* lodepng.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 95F6A19119D8636100B63ECE /* lodepng.cpp */; };
+		95F6A19519D8636100B63ECE /* README.md in Sources */ = {isa = PBXBuildFile; fileRef = 95F6A19319D8636100B63ECE /* README.md */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -24,7 +26,10 @@
 
 /* Begin PBXFileReference section */
 		95B11A2719D1F94700B9D1EA /* OneBootlogoTools */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = OneBootlogoTools; sourceTree = BUILT_PRODUCTS_DIR; };
-		95B11A2A19D1F94700B9D1EA /* main.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = main.c; sourceTree = "<group>"; };
+		95B11A2A19D1F94700B9D1EA /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		95F6A19119D8636100B63ECE /* lodepng.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = lodepng.cpp; sourceTree = "<group>"; };
+		95F6A19219D8636100B63ECE /* lodepng.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = lodepng.h; sourceTree = "<group>"; };
+		95F6A19319D8636100B63ECE /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -43,6 +48,7 @@
 			children = (
 				95B11A2919D1F94700B9D1EA /* OneBootlogoTools */,
 				95B11A2819D1F94700B9D1EA /* Products */,
+				95F6A19019D8636100B63ECE /* lodepng */,
 			);
 			sourceTree = "<group>";
 		};
@@ -57,9 +63,19 @@
 		95B11A2919D1F94700B9D1EA /* OneBootlogoTools */ = {
 			isa = PBXGroup;
 			children = (
-				95B11A2A19D1F94700B9D1EA /* main.c */,
+				95B11A2A19D1F94700B9D1EA /* main.cpp */,
 			);
 			path = OneBootlogoTools;
+			sourceTree = "<group>";
+		};
+		95F6A19019D8636100B63ECE /* lodepng */ = {
+			isa = PBXGroup;
+			children = (
+				95F6A19119D8636100B63ECE /* lodepng.cpp */,
+				95F6A19219D8636100B63ECE /* lodepng.h */,
+				95F6A19319D8636100B63ECE /* README.md */,
+			);
+			path = lodepng;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -118,7 +134,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				95EE8CA919D225F400D394F6 /* main.c in Sources */,
+				95F6A19519D8636100B63ECE /* README.md in Sources */,
+				95EE8CA919D225F400D394F6 /* main.cpp in Sources */,
+				95F6A19419D8636100B63ECE /* lodepng.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

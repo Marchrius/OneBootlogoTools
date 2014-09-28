@@ -1,5 +1,5 @@
 //
-//  main.c
+//  main.cpp
 //  OnePlusOneBootConverter
 //
 //  Created by Matteo Gaggiano on 23/09/14.
@@ -7,12 +7,15 @@
 //
 
 #include <stdio.h>
+#include <iostream>
 #include <stdlib.h>
 #include <errno.h>
 #include <string.h>
 
+#include "../lodepng/lodepng.h"
+
 #define AUTHOR "Matteo Gaggiano"
-#define VERSION "1.0b2"
+#define VERSION "1.1b2"
 
 #if DEBUG
 #define DLOG(fmt, ...) printf("Debug: " fmt "\n", ##__VA_ARGS__);
@@ -24,69 +27,91 @@
 #define uint8_t unsigned char
 #endif
 
-void usage();
-
-typedef unsigned short bool;
 #define FALSE 0
 #define TRUE  1
+
+#define usage(x) std::cout << getexecname(x) << "\n\t-b \t Overwrite the bootlogo\n\t-f \t Overwrite the fastboot image\n\t-s \t Save raw images\n\nVersion: " VERSION " by " AUTHOR << std::endl;
 
 unsigned long FILE_LEN = 9821696;
 unsigned long LOGO_LEN = 6220800;
 unsigned long FAST_LEN = 315000;
 
+char* getexecname(const char * x)
+{
+    char*a,*b=NULL;
+    strtok_r((char*)x, "/",&a);
+    while (a!=NULL) {strtok_r(NULL, "/",&a);b=(a==NULL)?b:strdup(a);}
+    return b;
+}
+
+void RGBToBGR(std::vector<unsigned char>& image)
+{
+    unsigned char temp;
+    for (int i = 0; i < image.size(); i+=3) {
+        temp = image[i];
+        image[i] = image[i+2];
+        image[i+2] = temp;
+    }
+}
+
 int main(int argc, const char * argv[]) {
     
-    long int logosize = 0;
-    
-    long int fastsize = 0;
-    
 	long unsigned int i = 0;
+    bool flashBoot = false, flashFast = false, saverawimages = false;
     
-    FILE *logoF = NULL;
-    FILE *fastF = NULL;
-    FILE *fileF = NULL;
-    
-    bool flashBoot = FALSE;
-    bool flashFast = FALSE;
-    
-	char option = 0;
+	char opt = 0;
 
-	while ((option = getopt(argc, argv,"bf")) != -1) {
-        switch (option) {
-       	     case 'b' : flashBoot = TRUE;
-       	         break;
-       	     case 'f' : flashFast = TRUE;
-       	         break;
-			default:
-				usage(); 
-       	         exit(EXIT_FAILURE);
-       	}
-	}
-
+    while (opt < argc) {
+        if (strcmp(argv[0], "-b") == 0) flashBoot = true;
+        if (strcmp(argv[0], "-f") == 0) flashFast = true;
+        if (strcmp(argv[0], "-s") == 0) saverawimages = true;
+        opt++;
+    }
+    
 	if ( !flashBoot && !flashFast ) {
-		usage();
+		usage(argv[0]);
 		exit(EXIT_FAILURE);
 	}
+    
+    std::vector<unsigned char> logoF, fastF;
+    unsigned int w, h;
+    FILE *fileF = NULL;
 
-    uint8_t *logoBin = malloc(sizeof(uint8_t) * LOGO_LEN);
-    
-    uint8_t *fastBin = malloc(sizeof(uint8_t) * FAST_LEN);
-    
-    uint8_t *fileBin = malloc(sizeof(uint8_t) * FILE_LEN);
-    
-    logoF = fopen("bootlogo.raw", "r");
-    if (!logoF && flashBoot) {
-        perror("Error while read bootlogo.raw");
-        return errno;
+    if (flashBoot) {
+        std::cout<<"Loading bootlogo.png"<<std::endl;
+        if (lodepng::decode(logoF, w, h, "bootlogo.png", LCT_RGB, 8)) {
+            std::cerr << "" << std::endl;
+            exit(EXIT_FAILURE);
+        }
+        if (logoF.size() != LOGO_LEN) {
+            std::cerr << "Error: the w*h of the bootlogo.png isn't 1080x1920" << std::endl;
+            exit(EXIT_FAILURE);
+        }
+        RGBToBGR(logoF);
+        if (saverawimages) {
+            lodepng::save_file(logoF, "bootlogo.raw");
+            std::cout<<"Saved bootlogo.raw"<<std::endl;
+        }
     }
     
-	flashBoot = TRUE;
-    
-    fastF = fopen("fastboot.raw", "r");
-    if (!fastF && flashFast) {
-        perror("Error while read fastboot.raw");
-        return errno;
+    if (flashFast) {
+        std::cout<<"Loading fastboot.png"<<std::endl;
+        if (lodepng::decode(fastF, w, h, "fastboot.png", LCT_RGB, 8)) {
+            std::cerr << "" << std::endl;
+            exit(EXIT_FAILURE);
+        }
+        if (fastF.size() != LOGO_LEN) {
+            std::cerr << "Error: the w*h of the fastboot.png isn't 350x300" << std::endl;
+            exit(EXIT_FAILURE);
+        }
+        RGBToBGR(logoF);
+        if (saverawimages) {
+            lodepng::save_file(fastF, "fastboot.raw");
+            std::cout<<"Loading fastboot.raw"<<std::endl;
+        }
     }
+    
+    uint8_t *fileBin = (uint8_t *) malloc(sizeof(uint8_t) * FILE_LEN);
     
     fileF = fopen("logo.bin", "r");
     if (!fileF) {
@@ -94,48 +119,30 @@ int main(int argc, const char * argv[]) {
         return errno;
     }
     
-    if (flashBoot) {
-        fseek(logoF, 0L, SEEK_END);
-        logosize = ftell(logoF);
-        
-        fseek(logoF, 0L, SEEK_SET);
-    }
-    
-    if (flashFast) {
-        fseek(fastF, 0L, SEEK_END);
-        fastsize = ftell(fastF);
-        
-        fseek(fastF, 0L, SEEK_SET);
-    }
-    
     for ( i = 0; i < FILE_LEN; i++) {
         fileBin[i] = fgetc(fileF);
     }
     
     fclose(fileF);
-
-    for ( i = 0; i < LOGO_LEN && flashBoot; i++) {
-        logoBin[i] = fgetc(logoF);
-    }
-	
-	fclose(logoF);
-    
-    for ( i = 0; i < FAST_LEN && flashFast; i++) {
-        fastBin[i] = fgetc(fastF);
-    }
-
-	fclose(fastF);
-    
+    bool bm = false, fm = false;
     for ( i = 0; i < FILE_LEN; i++)
     {
         if (i >= 512 && i < 6221312 && flashBoot)
         {
-            fileBin[i] = logoBin[i - 512]; // bootlogo image
+            fileBin[i] = logoF[i - 512]; // bootlogo image
+            if (!bm) {
+                std::cout<<"Writing bootlogo image"<<std::endl;
+                bm=true;
+            }
         } else
         
         if (i >= 7234560 && i < 7549560 && flashFast)
         {
-            fileBin[i] = fastBin[i - 7234560]; // fastboot logo image
+            fileBin[i] = fastF[i - 7234560]; // fastboot logo image
+            if (!fm) {
+                std::cout<<"Writing fastboot image"<<std::endl;
+                fm=true;
+            }
         }
     }
     
@@ -149,15 +156,9 @@ int main(int argc, const char * argv[]) {
         fwrite(&fileBin[i], sizeof(uint8_t), 1, fileF);
     }
     
-    printf("All ok. logo-modified.bin created correctly! \n");
+    std::cout<<"All jobs done! The file logo-modified.bin was created correctly"<<std::endl;
     
     free(fileBin);
-    free(logoBin);
-    free(fastBin);
     
     return 0;
-}
-
-void usage() {
-    printf("OneBootlogoTools:\n\t-b bootlogo.raw \t Overwrite the bootlogo\n\t-f fastboot.raw \t Overwrite the fastboot image\n\nVersion: " VERSION " by " AUTHOR "\n");
 }

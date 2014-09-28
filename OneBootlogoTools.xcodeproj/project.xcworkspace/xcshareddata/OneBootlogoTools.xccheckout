@@ -10,6 +10,8 @@
 	<string>OneBootlogoTools</string>
 	<key>IDESourceControlProjectOriginsDictionary</key>
 	<dict>
+		<key>75D697A81A383EA24004400E21CB4F2DDFE6EF8C</key>
+		<string>https://github.com/lvandeve/lodepng.git</string>
 		<key>BAEDD40F4B465BDF80A4F8FAA01BD98B9BFFF50A</key>
 		<string>https://github.com/Marchrius/OneBootlogoTools.git</string>
 	</dict>
@@ -17,6 +19,8 @@
 	<string>OneBootlogoTools.xcodeproj</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
+		<key>75D697A81A383EA24004400E21CB4F2DDFE6EF8C</key>
+		<string>../../lodepng/</string>
 		<key>BAEDD40F4B465BDF80A4F8FAA01BD98B9BFFF50A</key>
 		<string>../..</string>
 	</dict>
@@ -28,6 +32,14 @@
 	<string>BAEDD40F4B465BDF80A4F8FAA01BD98B9BFFF50A</string>
 	<key>IDESourceControlProjectWCConfigurations</key>
 	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>75D697A81A383EA24004400E21CB4F2DDFE6EF8C</string>
+			<key>IDESourceControlWCCName</key>
+			<string>lodepng</string>
+		</dict>
 		<dict>
 			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
 			<string>public.vcs.git</string>
