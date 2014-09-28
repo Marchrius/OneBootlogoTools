@@ -1,6 +1,6 @@
 //
 //  main.cpp
-//  OnePlusOneBootConverter
+//  OneBootlogoTools
 //
 //  Created by Matteo Gaggiano on 23/09/14.
 //  Copyright (c) 2014 Matteo Gaggiano. All rights reserved.
@@ -35,9 +35,12 @@ unsigned long FAST_LEN = 315000;
 
 char* getexecname(const char * x)
 {
-    char*a,*b=NULL;
-    strtok_r((char*)x, "/",&a);
-    while (a!=NULL) {strtok_r(NULL, "/",&a);b=(a==NULL)?b:strdup(a);}
+    char* a,* b = NULL;
+    a = strtok((char*)x, "/");
+    while (a != NULL) {
+		a = strtok(NULL, "/");
+		b = (a==NULL) ? b : strdup(a);
+	}
     return b;
 }
 
