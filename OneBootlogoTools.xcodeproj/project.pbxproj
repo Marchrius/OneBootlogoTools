@@ -47,8 +47,8 @@
 			isa = PBXGroup;
 			children = (
 				95B11A2919D1F94700B9D1EA /* OneBootlogoTools */,
-				95B11A2819D1F94700B9D1EA /* Products */,
 				95F6A19019D8636100B63ECE /* lodepng */,
+				95B11A2819D1F94700B9D1EA /* Products */,
 			);
 			sourceTree = "<group>";
 		};

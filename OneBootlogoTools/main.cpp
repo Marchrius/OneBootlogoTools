@@ -27,9 +27,6 @@
 #define uint8_t unsigned char
 #endif
 
-#define FALSE 0
-#define TRUE  1
-
 #define usage(x) std::cout << getexecname(x) << "\n\t-b \t Overwrite the bootlogo\n\t-f \t Overwrite the fastboot image\n\t-s \t Save raw images\n\nVersion: " VERSION " by " AUTHOR << std::endl;
 
 unsigned long FILE_LEN = 9821696;
@@ -74,13 +71,13 @@ int main(int argc, const char * argv[]) {
 	}
     
     std::vector<unsigned char> logoF, fastF;
-    unsigned int w, h;
+    unsigned int w, h, error;
     FILE *fileF = NULL;
 
     if (flashBoot) {
         std::cout<<"Loading bootlogo.png"<<std::endl;
-        if (lodepng::decode(logoF, w, h, "bootlogo.png", LCT_RGB, 8)) {
-            std::cerr << "" << std::endl;
+        if ((error = lodepng::decode(logoF, w, h, "bootlogo.png", LCT_RGB, 8))) {
+            std::cout << "decoder error " << error << ": " << lodepng_error_text(error) << std::endl;
             exit(EXIT_FAILURE);
         }
         if (logoF.size() != LOGO_LEN) {
@@ -96,8 +93,8 @@ int main(int argc, const char * argv[]) {
     
     if (flashFast) {
         std::cout<<"Loading fastboot.png"<<std::endl;
-        if (lodepng::decode(fastF, w, h, "fastboot.png", LCT_RGB, 8)) {
-            std::cerr << "" << std::endl;
+        if ((error = lodepng::decode(fastF, w, h, "fastboot.png", LCT_RGB, 8))) {
+            std::cout << "decoder error " << error << ": " << lodepng_error_text(error) << std::endl;
             exit(EXIT_FAILURE);
         }
         if (fastF.size() != LOGO_LEN) {

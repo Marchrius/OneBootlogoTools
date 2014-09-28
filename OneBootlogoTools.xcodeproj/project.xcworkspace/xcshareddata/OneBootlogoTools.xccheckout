@@ -20,7 +20,7 @@
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
 		<key>75D697A81A383EA24004400E21CB4F2DDFE6EF8C</key>
-		<string>../../lodepng/</string>
+		<string>../../lodepng</string>
 		<key>BAEDD40F4B465BDF80A4F8FAA01BD98B9BFFF50A</key>
 		<string>../..</string>
 	</dict>
