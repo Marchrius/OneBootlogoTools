@@ -29,9 +29,16 @@
 
 #define usage(x) std::cout << getexecname(x) << "\n\t-b \t Overwrite the bootlogo\n\t-f \t Overwrite the fastboot image\n\t-s \t Save raw images\n\nVersion: " VERSION " by " AUTHOR << std::endl;
 
-unsigned long FILE_LEN = 9821696;
-unsigned long LOGO_LEN = 6220800;
-unsigned long FAST_LEN = 315000;
+#define FILE_LEN 9821696L
+
+#define LOGO_START 512L
+#define LOGO_LEN 6220800L
+#define LOGO_END (LOGO_START+LOGO_LEN)
+
+
+#define FAST_START 7234560L
+#define FAST_LEN 315000L
+#define FAST_END (FAST_START+FAST_LEN)
 
 char* getexecname(const char * x)
 {
@@ -127,7 +134,7 @@ int main(int argc, const char * argv[]) {
     bool bm = false, fm = false;
     for ( i = 0; i < FILE_LEN; i++)
     {
-        if (i >= 512 && i < 6221312 && flashBoot)
+        if (i >= LOGO_START && i < LOGO_END && flashBoot)
         {
             fileBin[i] = logoF[i - 512]; // bootlogo image
             if (!bm) {
@@ -136,9 +143,9 @@ int main(int argc, const char * argv[]) {
             }
         } else
         
-        if (i >= 7234560 && i < 7549560 && flashFast)
+        if (i >= FAST_START && i < FAST_END && flashFast)
         {
-            fileBin[i] = fastF[i - 7234560]; // fastboot logo image
+            fileBin[i] = fastF[i - FAST_START]; // fastboot logo image
             if (!fm) {
                 std::cout<<"Writing fastboot image"<<std::endl;
                 fm=true;
