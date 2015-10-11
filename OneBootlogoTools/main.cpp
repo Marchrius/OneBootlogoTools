@@ -12,10 +12,13 @@
 #include <errno.h>
 #include <string.h>
 
-#include "../lodepng/lodepng.h"
+using namespace std;
 
-#define AUTHOR "Matteo Gaggiano"
-#define VERSION "1.1b2"
+#include "../lodepng/lodepng.h"
+#include "item.h"
+
+#define AUTHOR "Matteo Gaggiano (from a work by chillstep1998)"
+#define VERSION "1.2b3"
 
 #if DEBUG
 #define DLOG(fmt, ...) printf("Debug: " fmt "\n", ##__VA_ARGS__);
@@ -27,22 +30,39 @@
 #define uint8_t unsigned char
 #endif
 
-#define usage(x) std::cout << getexecname(x) << "\n\t-b \t Overwrite the bootlogo\n\t-f \t Overwrite the fastboot image\n\t-l \t Overwrite the lowbattery image\n\t-s \t Save raw images\n\nVersion: " VERSION " by " AUTHOR << std::endl;
+#define usage(x) cout << getexecname(x) << "\n\t-b \t Overwrite the bootlogo\n\
+\t-f \t Overwrite the fastboot image\n\
+\t-l \t Overwrite the lowbattery image\n\
+\t-s \t Save raw images\n\n\
+Version: " VERSION " by " AUTHOR << endl;
 
 #define FILE_LEN 9821696L
+#define PNG_CHANNEL 3L
 
 #define LOGO_START 512L
-#define LOGO_LEN (1080L*1919L*3L)
+#define LOGO_W      1080L
+#define LOGO_H      1919L
+#define LOGO_LEN (LOGO_W*LOGO_H*PNG_CHANNEL)
 #define LOGO_END (LOGO_START+LOGO_LEN)
 
 
 #define FAST_START 7234560L
-#define FAST_LEN (350L*313L*3L)
+#define FAST_W 350L
+#define FAST_H 313L
+#define FAST_LEN (FAST_W*FAST_H*PNG_CHANNEL)
 #define FAST_END (FAST_START+FAST_LEN)
 
 #define LOWBAT_START 7563776L
-#define LOWBAT_LEN (645L*1074L*3L)
+#define LOWBAT_W 645L
+#define LOWBAT_H 1074L
+#define LOWBAT_LEN (LOWBAT_W*LOWBAT_H*PNG_CHANNEL)
 #define LOWBAT_END (LOWBAT_START+LOWBAT_LEN)
+
+
+#define bigendian(n) ((n & 0xFF) << 24)\
+| ((n & 0xFF00) << 8)\
+| ((n >> 8) & 0xFF00)\
+| (n >> 24)\
 
 char* getexecname(const char * x)
 {
@@ -55,7 +75,7 @@ char* getexecname(const char * x)
     return b;
 }
 
-void RGBToBGR(std::vector<unsigned char>& image)
+void RGBToBGR(vector<unsigned char>& image)
 {
     unsigned char temp;
     for (int i = 0; i < image.size(); i+=3) {
@@ -65,7 +85,12 @@ void RGBToBGR(std::vector<unsigned char>& image)
     }
 }
 
+int newLogo(int, const char*[]);
+
 int main(int argc, const char * argv[]) {
+    
+    newLogo(argc, argv);
+    return 0;
     
 	long unsigned int i = 0;
     bool flashBoot = false, flashFast = false, flashLowBattery = false, saverawimages = false;
@@ -82,62 +107,66 @@ int main(int argc, const char * argv[]) {
 		exit(EXIT_FAILURE);
 	}
     
-    std::vector<unsigned char> bootlogoF, fastbootF, lowbatteryF;
+    vector<unsigned char> bootlogoF, fastbootF, lowbatteryF;
     unsigned int w, h, error;
     FILE *fileF = NULL;
 
     if (flashBoot) {
-        std::cout<<"Loading bootlogo.png"<<std::endl;
+        cout<<"Loading bootlogo.png"<<endl;
         if ((error = lodepng::decode(bootlogoF, w, h, "bootlogo.png", LCT_RGB, 8))) {
-            std::cout << "decoder error " << error << ": " << lodepng_error_text(error) << std::endl;
+            cout << "decoder error " << error << ": " << lodepng_error_text(error) << endl;
             exit(EXIT_FAILURE);
         }
         if (bootlogoF.size() != LOGO_LEN) {
-            std::cerr << "Error: the w*h of the bootlogo.png isn't 1080x1919" << std::endl;
+            cerr << "Error: the w*h of the bootlogo.png isn't " << LOGO_W << "x" << LOGO_H << endl;
             exit(EXIT_FAILURE);
         }
         RGBToBGR(bootlogoF);
         if (saverawimages) {
             lodepng::save_file(bootlogoF, "bootlogo.raw");
-            std::cout<<"Saved bootlogo.raw"<<std::endl;
+            cout<<"Saved bootlogo.raw"<<endl;
         }
     }
     
     if (flashFast) {
-        std::cout<<"Loading fastboot.png"<<std::endl;
+        cout<<"Loading fastboot.png"<<endl;
         if ((error = lodepng::decode(fastbootF, w, h, "fastboot.png", LCT_RGB, 8))) {
-            std::cout << "decoder error " << error << ": " << lodepng_error_text(error) << std::endl;
+            cout << "decoder error " << error << ": " << lodepng_error_text(error) << endl;
             exit(EXIT_FAILURE);
         }
         if (fastbootF.size() != FAST_LEN) {
-            std::cerr << "Error: the w*h of the fastboot.png isn't 350x313" << std::endl;
+            cerr << "Error: the w*h of the fastboot.png isn't " << FAST_W << "x" << FAST_W << endl;
             exit(EXIT_FAILURE);
         }
         RGBToBGR(fastbootF);
         if (saverawimages) {
             lodepng::save_file(fastbootF, "fastboot.raw");
-            std::cout<<"Saved fastboot.raw"<<std::endl;
+            cout<<"Saved fastboot.raw"<<endl;
         }
     }
     
     if (flashLowBattery) {
-        std::cout<<"Loading lowbattery.png"<<std::endl;
+        cout<<"Loading lowbattery.png"<<endl;
         if ((error = lodepng::decode(lowbatteryF, w, h, "lowbattery.png", LCT_RGB, 8))) {
-            std::cout << "decoder error " << error << ": " << lodepng_error_text(error) << std::endl;
+            cout << "decoder error " << error << ": " << lodepng_error_text(error) << endl;
             exit(EXIT_FAILURE);
         }
         if (lowbatteryF.size() != LOWBAT_LEN) {
-            std::cerr << "Error: the w*h of the lowbattery.png isn't 645x1074" << std::endl;
+            cerr << "Error: the w*h of the lowbattery.png isn't " << LOWBAT_W << "x" << LOWBAT_H << endl;
             exit(EXIT_FAILURE);
         }
         RGBToBGR(lowbatteryF);
         if (saverawimages) {
             lodepng::save_file(lowbatteryF, "lowbattery.raw");
-            std::cout<<"Saved lowbattery.raw"<<std::endl;
+            cout<<"Saved lowbattery.raw"<<endl;
         }
     }
     
     uint8_t *fileBin = (uint8_t *) malloc(sizeof(uint8_t) * FILE_LEN);
+    
+//    uint8_t fileBin[FILE_LEN];
+    
+    bzero(fileBin, FILE_LEN);
     
     fileF = fopen("logo.bin", "r");
     if (!fileF) {
@@ -150,37 +179,39 @@ int main(int argc, const char * argv[]) {
     }
     
     fclose(fileF);
+    
     bool bm = false, fm = false, lm = false;
+    
     for ( i = 0; i < FILE_LEN; i++)
     {
-        if (i >= LOGO_START && i < LOGO_END && flashBoot)
+        if ( flashBoot && i >= LOGO_START && i < LOGO_END )
         {
-            fileBin[i] = (bootlogoF[i - 512]); // bootlogo image
+            fileBin[i] = (bootlogoF[i - LOGO_START]); // bootlogo image
             if (!bm) {
-                std::cout<<"Writing bootlogo image"<<std::endl;
+                cout << "Writing bootlogo image" << endl;
                 bm=true;
             }
         } else
         
-        if (i >= FAST_START && i < FAST_END && flashFast)
+        if ( flashFast && i >= FAST_START && i < FAST_END)
         {
             fileBin[i] = (fastbootF[i - FAST_START]); // fastboot logo image
             if (!fm) {
-                std::cout<<"Writing fastboot image"<<std::endl;
+                cout << "Writing fastboot image" << endl;
                 fm=true;
             }
         } else
-        if (i >= LOWBAT_START && i < LOWBAT_END && flashLowBattery)
+        if ( flashLowBattery && i >= LOWBAT_START && i < LOWBAT_END )
         {
             fileBin[i] = (lowbatteryF[i - LOWBAT_START]); // lowbattery logo image
             if (!lm) {
-                std::cout<<"Writing lowbattery image"<<std::endl;
+                cout << "Writing lowbattery image" << endl;
                 lm=true;
             }
         }
     }
     
-    std::cout << "Saving modified binary..." << std::endl;
+    cout << "Saving modified binary..." << endl;
     
     fileF = fopen("logo-modified.bin", "w");
     if (!fileF) {
@@ -188,12 +219,50 @@ int main(int argc, const char * argv[]) {
         return errno;
     }
     
-    for ( i = 0; i < FILE_LEN; i++) {
-        fwrite(&fileBin[i], sizeof(unsigned char), 1, fileF);
+//    for ( i = 0; i < FILE_LEN; i++) {
+        fwrite(&fileBin, sizeof(unsigned char)*FILE_LEN, FILE_LEN, fileF);
+//    }
+
+    free(fileBin);
+    
+    cout << "All jobs done! The file logo-modified.bin was created correctly" << endl;
+        
+    return 0;
+}
+
+int newLogo(int argc, const char * argv[]) {
+    
+    FILE *f = fopen("/Users/matteo/Desktop/logo.bin", "r");
+    if (!f) {
+        perror("Reading file");
+        exit(1);
+    }
+    
+    fseek(f, 0L, SEEK_END);
+    long size = ftell(f);
+    fseek(f, 0L, SEEK_SET);
+    
+    uint8_t *binary = (uint8_t*)malloc(sizeof(uint8_t)*size);
+    
+    printf("File size:          %ld\n", size);
+    for (int i = 0; i < size; i++) {
+        binary[i] = fgetc(f);
     }
 
+    item items[7];
     
-    std::cout<<"All jobs done! The file logo-modified.bin was created correctly"<<std::endl;
-        
+    int j = 0;
+    for ( int i = 0; i < size; i+=soa(kMagicNumber)) {
+        if (strncmp((const char*)binary+i, kMagicNumber, soa(kMagicNumber)) == 0)
+            items[j++] = getItem(i, binary, true);
+    }
+    
+    vector<uint8_t> enc;
+    int w, h;
+    lodepng::decode(enc, w, h, "bootlogo.png", LCT_RGB, 8);
+    printItem(items[2]);
+    
+    printf("\n");
+    
     return 0;
 }

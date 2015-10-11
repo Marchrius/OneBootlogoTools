@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		956CC6C319EFF6B5005FB089 /* item.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 956CC6C119EFF6B5005FB089 /* item.cpp */; };
 		95EE8CA919D225F400D394F6 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 95B11A2A19D1F94700B9D1EA /* main.cpp */; };
 		95F6A19419D8636100B63ECE /* lodepng.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 95F6A19119D8636100B63ECE /* lodepng.cpp */; };
 		95F6A19519D8636100B63ECE /* README.md in Sources */ = {isa = PBXBuildFile; fileRef = 95F6A19319D8636100B63ECE /* README.md */; };
@@ -25,6 +26,9 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		956CC6C119EFF6B5005FB089 /* item.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = item.cpp; sourceTree = "<group>"; };
+		956CC6C219EFF6B5005FB089 /* item.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = item.h; sourceTree = "<group>"; };
+		9596823E19EAA35800A1A6D1 /* version.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = version.h; path = ../version.h; sourceTree = "<group>"; };
 		95B11A2719D1F94700B9D1EA /* OneBootlogoTools */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = OneBootlogoTools; sourceTree = BUILT_PRODUCTS_DIR; };
 		95B11A2A19D1F94700B9D1EA /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		95F6A19119D8636100B63ECE /* lodepng.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = lodepng.cpp; sourceTree = "<group>"; };
@@ -64,6 +68,9 @@
 			isa = PBXGroup;
 			children = (
 				95B11A2A19D1F94700B9D1EA /* main.cpp */,
+				956CC6C119EFF6B5005FB089 /* item.cpp */,
+				956CC6C219EFF6B5005FB089 /* item.h */,
+				9596823E19EAA35800A1A6D1 /* version.h */,
 			);
 			path = OneBootlogoTools;
 			sourceTree = "<group>";
@@ -104,7 +111,7 @@
 		95B11A1F19D1F94700B9D1EA /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0600;
+				LastUpgradeCheck = 0640;
 				ORGANIZATIONNAME = "Matteo Gaggiano";
 				TargetAttributes = {
 					95B11A2619D1F94700B9D1EA = {
@@ -134,6 +141,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				956CC6C319EFF6B5005FB089 /* item.cpp in Sources */,
 				95F6A19519D8636100B63ECE /* README.md in Sources */,
 				95EE8CA919D225F400D394F6 /* main.cpp in Sources */,
 				95F6A19419D8636100B63ECE /* lodepng.cpp in Sources */,
@@ -147,7 +155,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++98";
 				CLANG_CXX_LIBRARY = "libstdc++";
 				CLANG_ENABLE_MODULES = YES;
@@ -188,7 +195,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++98";
 				CLANG_CXX_LIBRARY = "libstdc++";
 				CLANG_ENABLE_MODULES = YES;
@@ -222,7 +228,6 @@
 		95B11A2F19D1F94700B9D1EA /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
 				PRODUCT_NAME = OneBootlogoTools;
 			};
 			name = Debug;
@@ -230,7 +235,6 @@
 		95B11A3019D1F94700B9D1EA /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
 				PRODUCT_NAME = OneBootlogoTools;
 			};
 			name = Release;
