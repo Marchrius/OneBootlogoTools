@@ -85,13 +85,15 @@ void RGBToBGR(vector<unsigned char>& image)
     }
 }
 
+#if 0
 int newLogo(int, const char*[]);
+#endif
 
 int main(int argc, const char * argv[]) {
-    
+#if 0
     newLogo(argc, argv);
     return 0;
-    
+#endif
 	long unsigned int i = 0;
     bool flashBoot = false, flashFast = false, flashLowBattery = false, saverawimages = false;
     
@@ -230,6 +232,7 @@ int main(int argc, const char * argv[]) {
     return 0;
 }
 
+#if 0
 int newLogo(int argc, const char * argv[]) {
     
     FILE *f = fopen("/Users/matteo/Desktop/logo.bin", "r");
@@ -259,10 +262,11 @@ int newLogo(int argc, const char * argv[]) {
     
     vector<uint8_t> enc;
     int w, h;
-    lodepng::decode(enc, w, h, "bootlogo.png", LCT_RGB, 8);
+    lodepng::decode(&enc, &w, &h, "bootlogo.png", LCT_RGB, 8);
     printItem(items[2]);
     
     printf("\n");
     
     return 0;
 }
+#endif
